@@ -2,21 +2,17 @@ FROM debian:bookworm-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Cài đặt Xvfb, x11vnc, openbox, ttyd, git, python3 và các công cụ cần thiết
-RUN apt-get update && apt-get install -y \
+# Cập nhật và cài đặt các gói giao diện X11, openbox và novnc một cách gọn gàng
+RUN apt-get update && apt-get install -y --no-install-recommends \
     xvfb \
     x11vnc \
     openbox \
-    ttyd \
-    git \
+    novnc \
+    websockify \
     python3 \
     net-tools \
     wget \
     && rm -rf /var/lib/apt/lists/*
-
-# Tải trực tiếp noVNC chính hãng từ GitHub về để chắc chắn có đủ giao diện web
-RUN git clone https://github.com/novnc/noVNC.git /opt/novnc \
-    && ln -s /opt/novnc/vnc.html /opt/novnc/index.html
 
 WORKDIR /app
 
