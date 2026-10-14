@@ -1,21 +1,18 @@
-FROM debian:bookworm-slim
+FROM alpine:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Cài đặt thêm ca-certificates để curl không bị lỗi chứng chỉ SSL
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apk update && apk add --no-cache \
     curl \
     bash \
     procps \
     net-tools \
     wget \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+    ca-certificates
 
-# Tải ttyd bản chuẩn trực tiếp từ GitHub
 RUN curl -L https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64 -o /usr/local/bin/ttyd && \
     chmod +x /usr/local/bin/ttyd
 
-WORKDIR /app
+WORKDIR /dev/shm
 
 CMD sh -c "ttyd -p ${PORT:-10000} -W bash"
