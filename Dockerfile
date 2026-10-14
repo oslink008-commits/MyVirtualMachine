@@ -1,8 +1,7 @@
-FROM debian:bookworm-slim
+FROM debian:bFROM debian:bookworm-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Cập nhật và cài đặt các gói giao diện X11, openbox và novnc một cách gọn gàng
 RUN apt-get update && apt-get install -y --no-install-recommends \
     xvfb \
     x11vnc \
@@ -17,6 +16,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 COPY entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
+
+# Thêm dòng này để tự động xóa lỗi định dạng Windows (CRLF -> LF)
+RUN sed -i 's/\r$//' /app/entrypoint.sh && chmod +x /app/entrypoint.sh
 
 CMD ["/app/entrypoint.sh"]
