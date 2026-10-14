@@ -2,12 +2,14 @@ FROM debian:bookworm-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Cài đặt thêm procps (chứa lệnh ps cho novnc) và các công cụ giao diện
 RUN apt-get update && apt-get install -y --no-install-recommends \
     xvfb \
     x11vnc \
     openbox \
     novnc \
     websockify \
+    procps \
     python3 \
     net-tools \
     wget \
@@ -15,8 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Tự động tạo trực tiếp script khởi chạy chuẩn Linux ngay trong Dockerfile, không cần file .sh ngoài nữa
+# Viết lại script khởi chạy thông minh: tự dọn dẹp khóa cũ và chạy chuẩn xác
 RUN echo '#!/bin/bash' > /app/start.sh && \
+    echo 'rm -rf /tmp/.X*-lock /tmp/.X11-unix/*' >> /app/start.sh && \
     echo 'Xvfb :99 -screen 0 1024x768x16 &' >> /app/start.sh && \
     echo 'export DISPLAY=:99' >> /app/start.sh && \
     echo 'sleep 1' >> /app/start.sh && \
