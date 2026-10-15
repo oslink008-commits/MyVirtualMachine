@@ -17,8 +17,8 @@ RUN apk update && apk add --no-cache \
 
 WORKDIR /app
 
-# Tạo một file index.html ở thư mục web để tự động chuyển hướng hoặc trỏ thẳng vào vnc.html
-RUN echo '<meta http-equiv="refresh" content="0; URL=vnc.html">' > /usr/share/novnc/index.html
+# Copy trực tiếp vnc.html thành index.html để khi vào trang chủ nó nhận diện luôn giao diện chuẩn mà không bị thiếu element
+RUN cp /usr/share/novnc/vnc.html /usr/share/novnc/index.html
 
 RUN echo '#!/bin/bash' > /app/start.sh && \
     echo 'rm -f /tmp/.X99-lock' >> /app/start.sh && \
