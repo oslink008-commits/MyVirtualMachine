@@ -17,6 +17,9 @@ RUN apk update && apk add --no-cache \
 
 WORKDIR /app
 
+# Tạo một file index.html trỏ thẳng sang vnc_lite.html (bản rút gọn không bị lỗi UI script)
+RUN echo '<meta http-equiv="refresh" content="0; URL=vnc_lite.html">' > /usr/share/novnc/index.html
+
 RUN echo '#!/bin/bash' > /app/start.sh && \
     echo 'rm -f /tmp/.X99-lock' >> /app/start.sh && \
     echo 'Xvfb :99 -screen 0 1024x768x16 -ac +extension RANDR &' >> /app/start.sh && \
