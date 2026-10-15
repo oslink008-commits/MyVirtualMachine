@@ -17,9 +17,6 @@ RUN apk update && apk add --no-cache \
 
 WORKDIR /app
 
-# Tạo file index.html chuẩn để chuyển hướng thẳng vào vnc.html ngay lập tức mà không làm hỏng script của noVNC
-RUN echo '<script>window.location.href = "vnc.html";</script>' > /usr/share/novnc/index.html
-
 RUN echo '#!/bin/bash' > /app/start.sh && \
     echo 'rm -f /tmp/.X99-lock' >> /app/start.sh && \
     echo 'Xvfb :99 -screen 0 1024x768x16 -ac +extension RANDR &' >> /app/start.sh && \
