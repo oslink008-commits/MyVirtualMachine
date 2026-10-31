@@ -1,18 +1,10 @@
+FROM ghcr.io/void-linux/void-glibc:latest
 
-FROM alpine:3.24
-
-RUN apk add --no-cache \
-    fastfetch \
-    openssh \
-    bash \
-    curl \
-    wget \
-    ttyd
+RUN xbps-install -Syu xbps && \
+    xbps-install -y bash curl wget openssh fastfetch && \
+    xbps-install -y ttyd && \
+    xbps-remove -O
 
 WORKDIR /root
 
-RUN ssh-keygen -A
-
-EXPOSE 10000
-
-CMD ["sh", "-c", "exec ttyd -p ${PORT:-10000} -c \"${WEB_USER}:${WEB_PASSWORD}\" -W bash -c 'fastfetch; exec bash'"]
+CMD ["sh", "-c", "exec ttyd -p ${PORT:-10000} -t enable-paste=true -W bash -lc 'fastfetch; exec bash'"]
